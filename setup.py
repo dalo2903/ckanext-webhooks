@@ -83,7 +83,5 @@ setup(
         [paste.paster_command]
         webhooks=ckanext.webhooks.commands:WebhookCommands
 
-        [ckan.celery_task]
-        tasks=ckanext.webhooks.celery_import:task_imports
     ''',
 )

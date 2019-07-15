@@ -9,9 +9,9 @@ import auth
 import actions
 import requests
 import ckan.model as model
+import ckan.lib.jobs as jobs
 
 from pylons import config
-from ckan.lib.celery_app import celery
 from ckan.lib.dictization import table_dictize
 from ckan.model.domain_object import DomainObjectOperation
 
@@ -74,11 +74,7 @@ class WebhooksPlugin(plugins.SingletonPlugin):
         for hook in webhooks:
             resource = table_dictize(entity, context)
             webhook = table_dictize(hook, context)
-            celery.send_task(
-                'webhooks.notify_hooks',
-                args=[resource, webhook, config.get('ckan.site_url')],
-                task_id='{}-{}'.format(str(uuid.uuid4()), topic)
-            )
+            jobs.enqueue(webhooks.notify_hooks, [resource, webhook, config.get('ckan.site_url')])
 
     def get_actions(self):
         actions_dict = {

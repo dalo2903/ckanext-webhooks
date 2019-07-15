@@ -4,7 +4,7 @@ from pylons import config
 
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
-import ckan.new_authz as new_authz
+import ckan.authz as new_authz
 
 log = logging.getLogger(__name__)
 
