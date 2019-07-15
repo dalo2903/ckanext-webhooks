@@ -7,9 +7,9 @@ import uuid
 import json
 import auth
 import actions
+import tasks
 import requests
 import ckan.model as model
-import ckan.lib.jobs as jobs
 
 from pylons import config
 from ckan.lib.dictization import table_dictize
@@ -74,12 +74,12 @@ class WebhooksPlugin(plugins.SingletonPlugin):
         for hook in webhooks:
             resource = table_dictize(entity, context)
             webhook = table_dictize(hook, context)
-            jobs.enqueue(webhooks.notify_hooks, [resource, webhook, config.get('ckan.site_url')])
-
+            toolkit.enqueue_job(tasks.notify_hooks, [resource, webhook, config.get('ckan.site_url')])
     def get_actions(self):
         actions_dict = {
             'webhook_create': actions.webhook_create,
             'webhook_delete': actions.webhook_delete,
+            'webhook_list' : actions.webhook_list,
             'webhook_show': actions.webhook_show
         }
         return actions_dict
@@ -88,6 +88,7 @@ class WebhooksPlugin(plugins.SingletonPlugin):
         auth_dict = {
             'webhook_create': auth.webhook_create,
             'webhook_delete': auth.webhook_delete,
+            'webhook_list' : auth.webhook_list,
             'webhook_show': auth.webhook_show
         }
         return auth_dict

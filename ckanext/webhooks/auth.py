@@ -61,5 +61,8 @@ def webhook_create(context, data_dict):
 def webhook_show(context, data_dict):
     return _user_has_minumum_role(context)
 
+def webhook_list(context, data_dict):
+    return _user_has_minumum_role(context)
+    
 def webhook_delete(context, data_dict):
     return _user_has_minumum_role(context)
